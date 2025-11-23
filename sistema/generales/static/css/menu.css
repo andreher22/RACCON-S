@@ -1,0 +1,165 @@
+/* ==== Layout general ==== */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    background-color: #f6f6f6;
+}
+
+/* ==== Sidebar ==== */
+.sidebar {
+    width: 260px;
+    background-color: #a60b0b;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: fixed;
+}
+
+/* ==== Logo ==== */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.logo i {
+    font-size: 28px;
+    color: white;
+}
+
+.logo h2 {
+    font-size: 20px;
+    font-weight: 700; /* negritas */
+    color: white; /* letra blanca */
+    letter-spacing: 1px;
+}
+
+/* ==== Menú ==== */
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.menu li {
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.menu li:hover {
+    background-color: #8e0a0a;
+    transform: translateX(4px);
+}
+
+.menu li.activo {
+    background-color: #7c0808;
+    font-weight: 600;
+}
+
+/* Control de visibilidad de secciones */
+.seccion {
+    display: none;
+}
+
+.seccion.activa {
+    display: block;
+}
+
+
+/* ==== Contenido ==== */
+.content {
+    flex: 1;
+    padding: 30px;
+    background-color: #f6f6f6;
+    margin-left: 260px; /* espacio para sidebar */
+    overflow-y: auto;
+    transition: margin-left 0.3s ease;
+}
+
+/* ==== Tarjetas ==== */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* ==== Títulos ==== */
+h1, h2 {
+    color: #333;
+}
+
+/* ==== Responsividad ==== */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 220px;
+    }
+
+    .content {
+        margin-left: 220px;
+        padding: 20px;
+    }
+
+    .logo h2 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Sidebar colapsa */
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        z-index: 1000;
+    }
+
+    .sidebar.activa {
+        left: 0;
+    }
+
+    /* Ajusta contenido al ancho completo */
+    .content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    /* Botón de menú hamburguesa */
+    .menu-toggle {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: transparent;
+        color: #000000;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 1px;
+        border-radius: 8px;
+        z-index: 1100;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo h2 {
+        font-size: 16px;
+    }
+
+    .menu li {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+}

@@ -1,0 +1,58 @@
+<!-- templates/menu/evaluaciones.html -->
+<div class="card">
+  <h3>Evaluaciones</h3>
+
+  {% if rol == 'docente' or rol == 'administrador' %}
+    <div style="margin-bottom: 12px;">
+      <button onclick="window.location.href='crear_evaluacion.html'">➕ Crear Evaluación</button>
+    </div>
+  {% endif %}
+
+  <table class="table" style="margin-top:12px; width:100%; border-collapse:collapse;">
+    <thead>
+      <tr style="background:#7b0018; color:white;">
+        <th style="padding:8px;">Título</th>
+        <th style="padding:8px;">Curso</th>
+        <th style="padding:8px;">Periodo</th>
+        <th style="padding:8px;">Estado</th>
+        <th style="padding:8px;">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in evaluaciones %}
+        <tr style="background:#f9f9f9; border-bottom:1px solid #ddd;">
+          <td style="padding:8px;">{{ e.titulo }}</td>
+          <td style="padding:8px;">{{ e.curso }}</td>
+          <td style="padding:8px;">{{ e.periodo }}</td>
+          <td style="padding:8px;">{{ e.estado }}</td>
+          <td style="padding:8px;">
+            <button onclick="window.location.href='ver_evaluacion.html'">Ver</button>
+
+            {% if rol == 'docente' %}
+              <button onclick="window.location.href='editar_evaluacion.html'">Editar</button>
+            {% endif %}
+
+            {% if rol == 'alumno' and e.estado == 'pendiente' %}
+              <button onclick="window.location.href='realizar_evaluacion.html'">Realizar</button>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5" style="text-align:center; padding:12px;">No hay evaluaciones.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="margin-top:20px; text-align:right;">
+    <button onclick="cerrarSesion()" style="background:#900; color:white;">Cerrar sesión</button>
+  </div>
+</div>
+
+<script>
+  function cerrarSesion() {
+    alert("Sesión cerrada correctamente.");
+    window.location.href = "{% url 'home' %}";
+  }
+</script>

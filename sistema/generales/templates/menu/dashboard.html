@@ -1,0 +1,100 @@
+<div class="panel-cards">
+  <div class="card">
+    <h3>Resumen</h3>
+    <p>Rol: <strong>{{ rol|capfirst }}</strong></p>
+    <p>Usuario: <strong>{{ usuario }}</strong></p>
+  </div>
+
+  {% if rol == "administrador" %}
+  <div class="card">
+    <h3>EVALUACIONES ACTIVAS</h3>
+    <p><strong>5</strong></p>
+  </div>
+
+  <div class="card">
+    <h3>REPORTES DISPONIBLES</h3>
+    <p><strong>12</strong></p>
+  </div>
+
+  <div class="card">
+    <h3>DOCENTES REGISTRADOS</h3>
+    <p><strong>8</strong></p>
+  </div>
+  {% endif %}
+
+  {% if rol == "docente" %}
+  <div class="card">
+    <h3>MIS CURSOS</h3>
+    <p><strong>3</strong></p>
+  </div>
+  <div class="card">
+    <h3>EVALUACIONES PUBLICADAS</h3>
+    <p><strong>7</strong></p>
+  </div>
+  {% endif %}
+
+  {% if rol == "alumno" %}
+  <div class="card">
+    <h3>EVALUACIONES PENDIENTES</h3>
+    <p><strong>2</strong></p>
+  </div>
+
+  <div class="card">
+    <h3>CALIFICACIONES APROBADAS</h3>
+    <p><strong>6</strong></p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- === Sección de actividades o rendimiento === -->
+{% if rol == "alumno" %}
+<div class="card" style="margin-top:16px">
+  <h3>Rendimiento Académico</h3>
+  <canvas id="graficaAlumno"></canvas>
+</div>
+{% else %}
+<div class="card" style="margin-top:16px">
+  <h3>Últimas Actividades</h3>
+  <ul>
+    <li>Actualización de datos del sistema</li>
+    <li>Revisión de evaluaciones</li>
+    <li>Nuevo usuario registrado</li>
+  </ul>
+</div>
+{% endif %}
+
+{% block extra_scripts %}
+{% if rol == "alumno" %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('graficaAlumno').getContext('2d');
+
+// Datos de ejemplo (solo para pruebas visuales)
+const etiquetas = ["Matemáticas", "Programación", "Bases de Datos"];
+const calificaciones = [9, 8, 10];
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: etiquetas,
+        datasets: [{
+            label: 'Calificación',
+            data: calificaciones,
+            borderWidth: 1,
+            backgroundColor: 'rgba(123, 0, 24, 0.6)',
+            borderColor: '#7b0018'
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 10
+            }
+        }
+    }
+});
+</script>
+{% endif %}
+{% endblock %}
+

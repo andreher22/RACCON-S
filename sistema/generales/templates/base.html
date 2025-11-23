@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel - {{ rol|capfirst }}</title>
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- CSS mínimo requerido para el control de secciones (si ya lo tienes en menu.css, no hace daño repetirlo) -->
+    <style>
+      /* Si tu menu.css ya tiene reglas similares puedes omitir esto, */
+      .seccion { display: none; opacity: 0; transform: translateY(6px); transition: opacity .22s ease, transform .22s ease; }
+      .seccion.activa { display: block; opacity: 1; transform: translateY(0); }
+      /* Indicar cursor en items del menú */
+      .menu li { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<!-- ==== Botón menú hamburguesa (solo visible en móviles) ==== -->
+<button class="menu-toggle"><i class="ri-menu-line"></i></button>
+
+<div class="sidebar">
+    <div class="logo">
+        <i class="ri-graduation-cap-fill"></i>
+        <h2>Raccon University</h2>
+    </div>
+
+    <ul class="menu">
+        {% if rol == 'administrador' %}
+            <li data-target="dashboard" class="activo"><i class="ri-dashboard-line"></i> Dashboard</li>
+            <li data-target="configuracion"><i class="ri-settings-3-line"></i> Configuración</li>
+            <li data-target="reportes"><i class="ri-file-chart-line"></i> Reportes</li>
+            <li data-target="analisis"><i class="ri-bar-chart-box-line"></i> Análisis</li>
+            <li data-target="docentes"><i class="ri-user-3-line"></i> Docentes</li>
+            <li data-target="cursos"><i class="ri-book-3-line"></i> Cursos</li>
+        {% elif rol == 'docente' %}
+            <li data-target="dashboard" class="activo"><i class="ri-dashboard-line"></i> Dashboard</li>
+            <li data-target="evaluaciones"><i class="ri-file-list-line"></i> Mis Evaluaciones</li>
+            <li data-target="comentarios"><i class="ri-chat-1-line"></i> Comentarios</li>
+            <li data-target="tendencias"><i class="ri-line-chart-line"></i> Tendencias</li>
+            <li data-target="configuracion"><i class="ri-settings-3-line"></i> Configuración</li>
+        {% elif rol == 'alumno' %}
+            <li data-target="dashboard" class="activo"><i class="ri-dashboard-line"></i> Dashboard</li>
+            <li data-target="pendientes"><i class="ri-time-line"></i> Evaluaciones Pendientes</li>
+            <li data-target="historial"><i class="ri-history-line"></i> Historial</li>
+            <li data-target="configuracion"><i class="ri-settings-3-line"></i> Configuración</li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="content">
+    {% block content %}
+    <h1>Bienvenido {{ usuario }}</h1>
+    <p>Mi panel de {{ rol }}</p>
+
+    <!-- Secciones dinámicas -->
+    <div id="dashboard" class="seccion activa">
+        {% include "menu/dashboard.html" %}
+    </div>
+    <div id="configuracion" class="seccion">
+        {% include "menu/configuracion.html" %}
+    </div>
+    <div id="reportes" class="seccion">
+        {% include "menu/reportes.html" %}
+    </div>
+    <div id="analisis" class="seccion">
+        {% include "menu/analisis.html" %}
+    </div>
+    <div id="docentes" class="seccion">
+        {% include "menu/docentes.html" %}
+    </div>
+    <div id="cursos" class="seccion">
+        {% include "menu/cursos.html" %}
+    </div>
+    <div id="evaluaciones" class="seccion">
+        {% include "menu/evaluaciones.html" %}
+    </div>
+    <div id="comentarios" class="seccion">
+        {% include "menu/comentarios.html" %}
+    </div>
+    <div id="tendencias" class="seccion">
+        {% include "menu/tendencias.html" %}
+    </div>
+    <div id="pendientes" class="seccion">
+        {% include "menu/pendientes.html" %}
+    </div>
+    <div id="historial" class="seccion">
+        {% include "menu/historial.html" %}
+    </div>
+    {% endblock %}
+</div>
+
+<!-- === Script principal (manejo del menú y secciones) === -->
+<script>
+(function(){
+  // Selecciona todos los items del menú y añade listeners robustos
+  const menuItems = document.querySelectorAll('.menu li');
+  const secciones = document.querySelectorAll('.seccion');
+  const sidebar = document.querySelector('.sidebar');
+  const toggle = document.querySelector('.menu-toggle');
+
+  function hideAllSections() {
+    secciones.forEach(s => s.classList.remove('activa'));
+  }
+
+  function clearActiveMenu() {
+    menuItems.forEach(li => li.classList.remove('activo'));
+  }
+
+  function showSectionById(id) {
+    const s = document.getElementById(id);
+    if (!s) return;
+    hideAllSections();
+    s.classList.add('activa');
+  }
+
+  // Agregar listeners a cada <li>
+  menuItems.forEach(li => {
+    li.addEventListener('click', (evt) => {
+      // Preferimos data-target; si no existe, intentar extraer de onclick
+      const target = li.dataset.target || (li.getAttribute('onclick') || '').match(/mostrarSeccion\('([^']+)'\)/)?.[1];
+      if (target) {
+        showSectionById(target);
+        clearActiveMenu();
+        // marcar el item actual con la clase activo
+        li.classList.add('activo');
+        // si sidebar está en modo móvil, opcionalmente cerrarlo
+        if (sidebar && sidebar.classList.contains('activa')) {
+          sidebar.classList.remove('activa');
+        }
+      }
+    });
+  });
+
+  // Toggle responsive
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      if (sidebar) sidebar.classList.toggle('activa');
+    });
+  }
+
+  // En carga, asegurarnos que la primera .seccion.activa (si existe) se muestre,
+  // o que el primer item del menú se active por defecto.
+  document.addEventListener('DOMContentLoaded', () => {
+    const initial = document.querySelector('.seccion.activa') || document.querySelector('.seccion');
+    if (initial) {
+      hideAllSections();
+      initial.classList.add('activa');
+    }
+    // marcar el primer menu item activo si ninguno lo está
+    if (!document.querySelector('.menu li.activo')) {
+      const first = document.querySelector('.menu li');
+      if (first) first.classList.add('activo');
+    }
+  });
+})();
+</script>
+
+<!-- === Lugar donde las plantillas pueden inyectar scripts === -->
+{% block extra_scripts %}
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!-- templates/menu/cursos.html -->
+<div class="card">
+  <h3>Cursos</h3>
+
+  {% if rol == 'administrador' %}
+    <div style="margin-bottom: 12px;">
+      <button onclick="window.location.href='crear_curso.html'">➕ Crear curso</button>
+    </div>
+  {% endif %}
+
+  <table class="table" style="margin-top:12px; width:100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background:#7b0018; color:white;">
+        <th style="padding:8px;">Código</th>
+        <th style="padding:8px;">Nombre</th>
+        <th style="padding:8px;">Docente</th>
+        <th style="padding:8px;">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in cursos %}
+        <tr style="background:#f9f9f9; border-bottom:1px solid #ddd;">
+          <td style="padding:8px;">{{ c.codigo }}</td>
+          <td style="padding:8px;">{{ c.nombre }}</td>
+          <td style="padding:8px;">{{ c.docente_nombre }}</td>
+          <td style="padding:8px;">
+            <button onclick="window.location.href='ver_curso.html'">Ver</button>
+            {% if rol != 'alumno' %}
+              <button onclick="window.location.href='editar_curso.html'">Editar</button>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4" style="text-align:center; padding:12px;">No hay cursos registrados.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="margin-top:20px; text-align:right;">
+    <button onclick="cerrarSesion()" style="background:#900; color:white;">Cerrar sesión</button>
+  </div>
+</div>
+
+<script>
+  function cerrarSesion() {
+    alert("Sesión cerrada correctamente.");
+    window.location.href = "{% url 'home' %}";
+  }
+</script>
+
+

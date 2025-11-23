@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Evaluación Docente</title>
+
+    <!-- Estilos principales -->
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="{% static 'img/logo.png' %}" alt="Logo">
+            <h2>Raccon University</h2>
+        </div>
+    </header>
+
+    <main >
+        <h1 class="titles">Sistema de Evaluación Docente</h1>
+        <p class="subtitles">
+            Plataforma integral para la evaluación y mejora continua de la calidad educativa.<br>
+            Facilitamos la retroalimentación entre estudiantes, docentes y administrativos para lograr la excelencia académica.
+        </p>
+
+        <section class="cards">
+            <div class="card">
+                <i class="ri-admin-line icon"></i>
+                <h3>Administrativos</h3>
+                <p>Gestión de evaluaciones, reportes y configuración del sistema.</p>
+                <button class="btn" onclick="abrirModal('modalAdmin')">Acceder</button>
+            </div>
+
+            <div class="card">
+                <i class="ri-user-3-line icon"></i>
+                <h3>Docentes</h3>
+                <p>Consulta de resultados y retroalimentación de evaluaciones.</p>
+                <button class="btn" onclick="abrirModal('modalDocente')">Acceder</button>
+            </div>
+
+            <div class="card">
+                <i class="ri-graduation-cap-line icon"></i>
+                <h3>Estudiantes</h3>
+                <p>Evaluación de docentes y cursos académicos.</p>
+                <button class="btn" onclick="abrirModal('modalEstudiante')">Acceder</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- === Modales === -->
+    <div id="modalAdmin" class="modal">
+      <div class="modal-contenido">
+        <span class="cerrar" onclick="cerrarModal('modalAdmin')">&times;</span>
+        {% include 'login/administrador.html' %}
+      </div>
+    </div>
+
+    <div id="modalDocente" class="modal">
+      <div class="modal-contenido">
+        <span class="cerrar" onclick="cerrarModal('modalDocente')">&times;</span>
+        {% include 'login/docente.html' %}
+      </div>
+    </div>
+
+    <div id="modalEstudiante" class="modal">
+      <div class="modal-contenido">
+        <span class="cerrar" onclick="cerrarModal('modalEstudiante')">&times;</span>
+        {% include 'login/estudiante.html' %}
+      </div>
+    </div>
+
+    <script>
+        function abrirModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+        function cerrarModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+        window.onclick = function (event) {
+            document.querySelectorAll('.modal').forEach(modal => {
+                if (event.target === modal) modal.style.display = 'none';
+            });
+        };
+    </script>
+</body>
+</html>

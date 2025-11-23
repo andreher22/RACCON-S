@@ -1,0 +1,66 @@
+<div class="card">
+  <h3>Tendencias</h3>
+  <p>Visualización de indicadores</p>
+
+  <canvas id="chartTendencias" style="max-height:360px;margin-top:10px"></canvas>
+
+  <h4 style="margin-top:16px">Detalles de indicadores</h4>
+  <table class="table">
+    <thead>
+      <tr><th>Indicador</th><th>Valor (%)</th></tr>
+    </thead>
+    <tbody>
+      {% for t in tendencias.lista %}
+        <tr>
+          <td>{{ t.nombre }}</td>
+          <td>{{ t.valor }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="2">No hay datos de tendencias disponibles.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Librería Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const ctx = document.getElementById('chartTendencias').getContext('2d');
+  new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: {{ tendencias.labels|default:"['C1','C2','C3','C4']" }},
+      datasets: [{
+        label: 'Indicadores',
+        data: {{ tendencias.data|default:"[60,75,80,70]" }},
+        fill: true,
+        backgroundColor: 'rgba(155, 0, 25, 0.2)',
+        borderColor: '#9a0019',
+        pointBackgroundColor: '#7b0018',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#9a0019'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          angleLines: { color: '#ddd' },
+          grid: { color: '#ccc' },
+          pointLabels: { color: '#333', font: { size: 13 } },
+          ticks: { beginAtZero: true, color: '#555' }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: { color: '#333', font: { size: 14 } }
+        }
+      }
+    }
+  });
+});
+</script>
+

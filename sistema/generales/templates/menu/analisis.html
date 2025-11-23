@@ -1,0 +1,226 @@
+<!-- templates/menu/analisis.html -->
+<div class="card">
+  <h2>Análisis de Tendencias</h2>
+  <p>Panel de análisis interactivo — datos de ejemplo para diseño y pruebas.</p>
+
+  <!-- Filtros -->
+  <div class="filtros" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+    <div style="flex:1;min-width:180px">
+      <label>Rango</label>
+      <select id="analisis-rango">
+        <option value="30">Últimos 30 días</option>
+        <option value="90">Últimos 90 días</option>
+        <option value="180">Últimos 180 días</option>
+        <option value="365" selected>Último año</option>
+      </select>
+    </div>
+
+    <div style="flex:1;min-width:200px">
+      <label>Curso</label>
+      <select id="analisis-curso">
+        <option value="todos" selected>Todos</option>
+        <option value="devweb">Desarrollo Web</option>
+        <option value="bd">Bases de Datos</option>
+        <option value="redes">Redes</option>
+        <option value="mat">Matemáticas</option>
+      </select>
+    </div>
+
+    <div style="flex:1;min-width:180px">
+      <label>Indicador</label>
+      <select id="analisis-indicador">
+        <option value="promedio" selected>Puntaje promedio</option>
+        <option value="participacion">Participación</option>
+        <option value="asistencia">Asistencia</option>
+      </select>
+    </div>
+
+    <div style="flex:0 0 160px; align-self:end">
+      <button id="btn-refrescar" class="btn">Refrescar</button>
+    </div>
+  </div>
+
+  <!-- Gráficas principales -->
+  <div class="grid-graficas" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px">
+    <div class="card" style="padding:12px;">
+      <h4>Serie temporal</h4>
+      <canvas id="chartAnalisis" style="width:100%;height:260px"></canvas>
+      <p style="font-size:13px;color:#666;margin-top:8px">Evolución del indicador seleccionado en el periodo.</p>
+    </div>
+
+    <div class="card" style="padding:12px;">
+      <h4>Comparativa por curso</h4>
+      <canvas id="chartComparativa" style="width:100%;height:260px"></canvas>
+      <p style="font-size:13px;color:#666;margin-top:8px">Comparación entre cursos principales.</p>
+    </div>
+  </div>
+
+  <!-- Tabla resumen -->
+  <div class="card" style="margin-top:16px;padding:12px;">
+    <h4>Resumen numérico</h4>
+    <table class="table" style="width:100%;margin-top:8px">
+      <thead>
+        <tr>
+          <th>Curso</th><th>Puntaje promedio</th><th>Participación (%)</th><th>Asistencia (%)</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-resumen">
+        <tr><td>Desarrollo Web</td><td>82</td><td>78</td><td>91</td></tr>
+        <tr><td>Bases de Datos</td><td>79</td><td>72</td><td>88</td></tr>
+        <tr><td>Redes</td><td>76</td><td>70</td><td>85</td></tr>
+        <tr><td>Matemáticas</td><td>80</td><td>65</td><td>82</td></tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:10px;font-size:13px;color:#666">Los números son ficticios y sirven para visualizar el diseño del reporte.</p>
+  </div>
+</div>
+
+{% block extra_scripts %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Datos de ejemplo (estructurados localmente)
+const SAMPLE = {
+  fecha: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+  cursos: ["Desarrollo Web","Bases de Datos","Redes","Matemáticas"],
+  indicadores: {
+    promedio: {
+      Desarrollo_Web: [75,78,80,82,83,85,84,86,88,87,86,85],
+      Bases_de_Datos:  [70,72,74,76,78,79,78,80,81,80,79,79],
+      Redes:          [68,69,70,72,73,75,74,75,76,76,75,76],
+      Matematicas:    [72,73,75,77,78,80,79,81,82,81,80,80]
+    },
+    participacion: {
+      Desarrollo_Web: [60,62,65,67,68,70,71,73,74,73,72,72],
+      Bases_de_Datos:  [55,56,58,60,61,62,63,64,64,64,63,63],
+      Redes:          [50,52,53,54,55,56,57,58,58,58,57,57],
+      Matematicas:    [48,49,50,52,53,54,55,56,57,56,55,55]
+    },
+    asistencia: {
+      Desarrollo_Web: [90,91,92,92,93,94,93,94,95,94,93,93],
+      Bases_de_Datos:  [88,88,89,89,89,90,90,90,91,90,89,89],
+      Redes:          [85,85,86,86,86,87,87,87,88,87,86,86],
+      Matematicas:    [82,82,83,83,84,85,84,85,86,85,84,84]
+    }
+  }
+};
+
+// Helpers para mapear nombres
+function keyForCurso(name) {
+  return name.replace(/\s+/g,'_');
+}
+
+// Instanciación de charts
+let chartAnalisis = null;
+let chartComparativa = null;
+
+function crearGraficas(indicador, cursoSeleccionado) {
+  const labels = SAMPLE.fecha;
+
+  // Serie temporal: si curso == 'todos' sumar promedio de cursos (o mostrar promedio general)
+  let serie;
+  if (cursoSeleccionado === 'todos') {
+    // Promedio entre cursos
+    serie = labels.map((_,i) => {
+      let sum = 0, count = 0;
+      SAMPLE.cursos.forEach(c => {
+        const key = keyForCurso(c);
+        const arr = SAMPLE.indicadores[indicador][key];
+        sum += arr[i];
+        count++;
+      });
+      return Math.round(sum / count);
+    });
+  } else {
+    serie = SAMPLE.indicadores[indicador][keyForCurso(cursoSeleccionado)];
+  }
+
+  // Datos comparativa (último mes)
+  const ultimoIndice = labels.length - 1;
+  const comparativaData = SAMPLE.cursos.map(c => SAMPLE.indicadores[indicador][keyForCurso(c)][ultimoIndice]);
+
+  // Crear/actualizar chartAnalisis
+  const ctx = document.getElementById('chartAnalisis').getContext('2d');
+  if (chartAnalisis) chartAnalisis.destroy();
+  chartAnalisis = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: indicador === 'promedio' ? 'Puntaje promedio' : (indicador === 'participacion' ? 'Participación (%)' : 'Asistencia (%)'),
+        data: serie,
+        borderWidth: 2,
+        tension: 0.25,
+        fill: false,
+        pointRadius: 3,
+        borderColor: '#7b0018',
+        backgroundColor: 'rgba(123,0,24,0.1)'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+
+  // Crear/actualizar chartComparativa
+  const ctx2 = document.getElementById('chartComparativa').getContext('2d');
+  if (chartComparativa) chartComparativa.destroy();
+  chartComparativa = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: SAMPLE.cursos,
+      datasets: [{
+        label: 'Valor último periodo',
+        data: comparativaData,
+        borderWidth: 1,
+        backgroundColor: SAMPLE.cursos.map((_,i) => `rgba(123,0,24,${0.35 + i*0.1})`),
+        borderColor: '#7b0018'
+      }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, scales: { y: { beginAtZero: true } } }
+  });
+
+  // Actualizar tabla resumen
+  const tbody = document.getElementById('tabla-resumen');
+  tbody.innerHTML = '';
+  SAMPLE.cursos.forEach((curso, idx) => {
+    const last = SAMPLE.indicadores[indicador][keyForCurso(curso)][ultimoIndice];
+    // Usamos valores de ejemplo fijos para participación y asistencia
+    const participacion = SAMPLE.indicadores['participacion'][keyForCurso(curso)][ultimoIndice];
+    const asistencia = SAMPLE.indicadores['asistencia'][keyForCurso(curso)][ultimoIndice];
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${curso}</td><td>${last}</td><td>${participacion}</td><td>${asistencia}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// Inicializa con valores por defecto
+document.addEventListener('DOMContentLoaded', () => {
+  const selectRango = document.getElementById('analisis-rango');
+  const selectCurso = document.getElementById('analisis-curso');
+  const selectIndicador = document.getElementById('analisis-indicador');
+  const btn = document.getElementById('btn-refrescar');
+
+  // Llenar el select de cursos con las opciones de SAMPLE (sin usar Django)
+  // (solo si el select está vacío o contiene opciones estáticas)
+  // aquí lo dejamos tal cual; si deseas poblar dinámicamente, descomenta:
+  // selectCurso.innerHTML = '<option value="todos">Todos</option>' + SAMPLE.cursos.map(c => `<option value="${c}">${c}</option>`).join('');
+
+  // Crear las gráficas inicialmente
+  crearGraficas('promedio', 'todos');
+
+  // Cambios en filtros refrescan las gráficas
+  btn.addEventListener('click', () => {
+    const indicador = selectIndicador.value;
+    const curso = selectCurso.value === 'todos' ? 'todos' : selectCurso.value;
+    crearGraficas(indicador, curso);
+  });
+});
+</script>
+{% endblock %}
+

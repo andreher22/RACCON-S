@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>REGISTRO ESTUDIANTE</title>
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+
+  <div class="login-card">
+    <h2>REGISTRO DE ESTUDIANTE</h2>
+    <p>COMPLETE LOS CAMPOS PARA CREAR SU CUENTA</p>
+
+    {% if errores %}
+      <div class="error-box">
+        <ul>
+          {% for error in errores %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'registro_estudiante' %}">
+      {% csrf_token %}
+
+      <!-- CARRERA -->
+      <label>CARRERA</label>
+      <select name="carrera" required>
+        <option value="">Seleccione su carrera</option>
+        <option value="Ingeniería Aeronáutica">INGENIERÍA AERONÁUTICA</option>
+        <option value="Ingeniería Logística">ING. LOGÍSTICA</option>
+        <option value="Ingeniería Agrobiotecnología">ING. AGROBIOTECNOLOGÍA</option>
+        <option value="Ingeniería Tecnologías de la Información e Innovación Digital">ING. TECNOLOGÍAS DE LA INFORMACIÓN E INNOVACIÓN DIGITAL</option>
+        <option value="Licenciatura Administración">LIC. ADMINISTRACIÓN</option>
+        <option value="Licenciatura Negocios y Mercadotecnia">LIC. NEGOCIOS Y MERCADOTECNIA</option>
+        <option value="Licenciatura Arquitectura">LIC. ARQUITECTURA</option>
+      </select>
+
+      <!-- CUATRIMESTRE -->
+      <label>CUATRIMESTRE</label>
+      <select name="cuatrimestre" required>
+        <option value="">Seleccione cuatrimestre</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+
+      <!-- GRUPO -->
+      <label>GRUPO</label>
+      <select name="grupo" required>
+        <option value="">Seleccione grupo</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+      </select>
+
+      <!-- MATRÍCULA -->
+      <label>MATRÍCULA</label>
+      <input type="text" name="matricula" placeholder="Ej. 20250012" required oninput="this.value = this.value.toUpperCase()">
+
+      <!-- NOMBRE -->
+      <label>NOMBRE COMPLETO</label>
+      <input type="text" name="nombre" placeholder="Ej. Ana López Pérez" required>
+
+      <!-- CORREO -->
+      <label>Correo electrónico</label>
+      <input type="email" name="correo" placeholder="Ej. ana@correo.com" required>
+
+      <!-- USUARIO -->
+      <label>Usuario</label>
+      <input type="text" name="usuario" placeholder="Elige un usuario" required>
+
+      <!-- CONTRASEÑA -->
+      <label>Contraseña</label>
+      <input type="password" name="password" placeholder="Crea una contraseña" required>
+
+      <!-- CONFIRMAR CONTRASEÑA -->
+      <label>Confirma tu contraseña</label>
+      <input type="password" name="confirmar_password" placeholder="Repite tu contraseña" required>
+
+      <button type="submit">REGISTRARSE</button>
+    </form>
+
+    <p>¿YA TIENES CUENTA? 
+      <a href="{% url 'login_estudiante' %}" class="link-form">INICIA SESIÓN AQUÍ</a>
+    </p>
+  </div>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,17 @@
+<div class="login-card">
+  <h2>Acceso Administrador</h2>
+  <p>Ingrese sus credenciales para acceder al panel administrativo</p>
+
+  <form method="POST" action="{% url 'login_admin' %}">
+    {% csrf_token %}
+    <label>Usuario</label>
+    <input type="text" name="usuario" placeholder="Ingrese su usuario" required>
+
+    <label>Contraseña</label>
+    <input type="password" name="password" placeholder="Ingrese su contraseña" required>
+
+    <button type="submit">Iniciar sesión</button>
+  </form>
+</div>
+
+

@@ -1,0 +1,166 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+/* === HEADER === */
+.header {
+    background: linear-gradient(90deg, #7b0018, #9a0021);
+    color: #fff;
+    padding: 0 5px;             /* Sin padding vertical extra */
+    display: flex;
+    align-items: center;
+    height: 4.5rem;                /* Altura fija del header */
+    box-sizing: border-box;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;                 /* Espacio entre logo y texto */
+    height: 100%;
+}
+
+/* === PENDIENTE === */
+
+
+.logo img {
+    height: 6rem;
+    margin-top: 1rem;
+    width: auto;
+    object-fit: contain;
+    display: block; /* aqui   */
+    filter: none;
+    mix-blend-mode: normal;
+    background: transparent;
+    /* Opcional: realza el blanco sin alterar color 
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));*/
+}
+
+
+.logo h2 {
+    font-size: 1.6rem;           /* Texto pequeño y proporcionado */
+    color: #fff;
+    margin: 0;
+    line-height: 1;
+    font-weight: 600;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .logo img {
+        height: 6rem;
+    }
+    .logo h2 {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo img {
+        height: 5rem;
+    }
+    .logo h2 {
+        font-size: 0.8rem;
+    }
+}
+
+/* === TEXTOS PRINCIPALES === */
+.title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-top: 20px;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 40px;
+}
+
+.titles {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-top: 20px;
+    color: black;
+}
+
+.subtitles {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 40px;
+    color: black;
+}
+
+/* === RESPONSIVIDAD GENERAL === */
+@media (max-width: 992px) {
+    .title, .titles {
+        font-size: 1.4rem;
+        margin-top: 15px;
+    }
+    .subtitle, .subtitles {
+        font-size: 0.7rem;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .title, .titles {
+        font-size: 1.4rem;
+        margin-top: 10px;
+    }
+    .subtitle, .subtitles {
+        font-size: 0.6rem;
+        margin-bottom: 25px;
+    }
+}
+
+/* === TARJETAS === */
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: #fafafa;
+    color: black;
+    width: 300px;
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    padding: 20px;
+    transition: all 0.3s ease;
+    animation: float 4s ease-in-out infinite;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.icon {
+    font-size: 50px;
+    color: #7b0018;
+    margin-bottom: 15px;
+}
+
+.btn {
+    background: #7b0018;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}

@@ -1,0 +1,15 @@
+<div class="login-card">
+  <h2>Acceso Docente</h2>
+  <p>Ingrese sus credenciales para acceder al panel docente</p>
+
+  <form method="POST" action="{% url 'login_docente' %}">
+    {% csrf_token %}
+    <label>Usuario</label>
+    <input type="text" name="usuario" placeholder="Ingrese su usuario" required>
+
+    <label>Contraseña</label>
+    <input type="password" name="password" placeholder="Ingrese su contraseña" required>
+
+    <button type="submit">Iniciar sesión</button>
+  </form>
+</div>

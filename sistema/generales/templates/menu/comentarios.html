@@ -1,0 +1,83 @@
+<div class="card">
+  <h3>Comentarios y Sugerencias</h3>
+  <p style="color:#555; margin-bottom:16px;">
+    Aquí puedes dejar tus observaciones, sugerencias o reportar algún problema.
+    Tus comentarios ayudan a mejorar el sistema.
+  </p>
+
+  <!-- === Formulario de comentario === -->
+  <form id="formComentario" style="margin-bottom:20px">
+    <label for="comentario" style="font-weight:600;">Escribe tu comentario:</label>
+    <textarea 
+      id="comentario" 
+      rows="4" 
+      placeholder="Describe tu comentario o sugerencia..."
+      required
+      style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-top:8px;">
+    </textarea>
+    <button 
+      type="submit" 
+      style="background-color:#7b0018;color:#fff;padding:10px 18px;border:none;border-radius:6px;margin-top:10px;cursor:pointer;">
+      Enviar
+    </button>
+  </form>
+
+  <!-- Mensaje de confirmación -->
+  <div id="msgEnviado" style="display:none;color:green;font-weight:bold;margin-bottom:10px;">
+    ✅ ¡Comentario enviado correctamente!
+  </div>
+
+  <!-- === Sección de comentarios previos (simulados) === -->
+  <div class="comentarios-lista" style="margin-top:20px;">
+    <h4>Últimos comentarios</h4>
+    <ul id="listaComentarios" style="list-style:none;padding:0;margin-top:10px;">
+      <li style="background:#f9f9f9;border-radius:8px;padding:10px;margin-bottom:8px;border-left:4px solid #7b0018;">
+        <strong>Laura</strong>
+        <span style="color:#888;font-size:0.9em;"> — 05/11/2025 10:32</span>
+        <p style="margin:6px 0 0 0;">Sería útil poder descargar reportes en PDF directamente desde el panel.</p>
+      </li>
+      <li style="background:#f9f9f9;border-radius:8px;padding:10px;margin-bottom:8px;border-left:4px solid #7b0018;">
+        <strong>Roberto</strong>
+        <span style="color:#888;font-size:0.9em;"> — 04/11/2025 17:10</span>
+        <p style="margin:6px 0 0 0;">Excelente diseño del sistema, pero el menú lateral podría ser más ancho.</p>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- === Script simple sin backend === -->
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('formComentario');
+  const textarea = document.getElementById('comentario');
+  const lista = document.getElementById('listaComentarios');
+  const msg = document.getElementById('msgEnviado');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const texto = textarea.value.trim();
+    if (!texto) return;
+
+    // Crear elemento del nuevo comentario
+    const nuevo = document.createElement('li');
+    nuevo.style.cssText = "background:#f9f9f9;border-radius:8px;padding:10px;margin-bottom:8px;border-left:4px solid #7b0018;";
+    const fecha = new Date().toLocaleString('es-MX', { dateStyle: 'short', timeStyle: 'short' });
+    nuevo.innerHTML = `
+      <strong>Usuario Actual</strong>
+      <span style="color:#888;font-size:0.9em;"> — ${fecha}</span>
+      <p style="margin:6px 0 0 0;">${texto}</p>
+    `;
+
+    // Insertar al inicio
+    lista.insertBefore(nuevo, lista.firstChild);
+    textarea.value = "";
+
+    // Mostrar mensaje temporal
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
+  });
+});
+</script>
+{% endblock %}
+

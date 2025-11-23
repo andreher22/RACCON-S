@@ -1,0 +1,52 @@
+<!-- templates/menu/docentes.html -->
+<div class="card">
+  <h3>Gestión de Docentes</h3>
+
+  {% if rol == 'administrador' %}
+    <div style="margin-bottom: 12px;">
+      <button onclick="window.location.href='crear_docente.html'">➕ Crear docente</button>
+    </div>
+  {% endif %}
+
+  <table class="table" style="margin-top:12px; width:100%; border-collapse:collapse;">
+    <thead>
+      <tr style="background:#7b0018; color:white;">
+        <th style="padding:8px;">Nombre</th>
+        <th style="padding:8px;">Correo</th>
+        <th style="padding:8px;">Curso</th>
+        <th style="padding:8px;">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in docentes_list %}
+        <tr style="background:#f9f9f9; border-bottom:1px solid #ddd;">
+          <td style="padding:8px;">{{ d.nombre }}</td>
+          <td style="padding:8px;">{{ d.correo }}</td>
+          <td style="padding:8px;">{{ d.curso }}</td>
+          <td style="padding:8px;">
+            <button onclick="window.location.href='ver_docente.html'">Ver</button>
+            {% if rol == 'administrador' %}
+              <button onclick="window.location.href='editar_docente.html'">Editar</button>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4" style="text-align:center; padding:12px;">No hay docentes registrados.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="margin-top:20px; text-align:right;">
+    <button onclick="cerrarSesion()" style="background:#900; color:white;">Cerrar sesión</button>
+  </div>
+</div>
+
+<script>
+  function cerrarSesion() {
+    alert("Sesión cerrada correctamente.");
+    window.location.href = "{% url 'home' %}";
+  }
+</script>
+

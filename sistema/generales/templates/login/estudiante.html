@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Estudiante</title>
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+
+  <div class="login-card">
+    <h2>Acceso Estudiante</h2>
+    <p>Ingrese sus credenciales para acceder al panel estudiante</p>
+
+    <form method="POST" action="{% url 'login_estudiante' %}">
+      {% csrf_token %}
+      <label>Usuario</label>
+      <input type="text" name="usuario" placeholder="Ingrese su usuario" required>
+
+      <label>Contraseña</label>
+      <input type="password" name="password" placeholder="Ingrese su contraseña" required>
+
+      <button type="submit">Iniciar sesión</button>
+    </form>
+
+    <p>¿No tienes cuenta? 
+      <a href="{% url 'registro_estudiante' %}" class="link-form">Regístrate aquí</a>
+    </p>
+  </div>
+
+</body>
+</html>
+
+
+
