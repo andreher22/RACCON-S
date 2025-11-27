@@ -1,0 +1,19 @@
+{% comment %} EL DOCENTE PUEDE VISUALIZAR ESTA EVALUACIÓN {% endcomment %}
+
+<div class="card">
+  <h3>{{ evaluacion.titulo }}</h3>
+
+  <p><strong>Curso:</strong> {{ evaluacion.curso }}</p>
+  <p><strong>Periodo:</strong> {{ evaluacion.periodo }}</p>
+
+  <hr>
+
+  <h4>Preguntas</h4>
+  <ul>
+    {% for p in preguntas %}
+      <li>{{ p.texto }}</li>
+    {% endfor %}
+  </ul>
+
+  <button onclick="window.history.back()">Regresar</button>
+</div>

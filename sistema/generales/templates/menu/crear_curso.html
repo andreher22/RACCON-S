@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h3>Crear Curso</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Código del curso:</label>
+        <input type="text" name="codigo" required>
+
+        <label>Nombre del curso:</label>
+        <input type="text" name="nombre" required>
+
+        <label>Docente:</label>
+        <select name="docente" required>
+            {% for d in docentes %}
+                <option value="{{ d.id }}">{{ d.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Crear</button>
+    </form>
+
+    <button onclick="window.location.href='{% url 'cursos' %}'" style="margin-top:12px;">
+        Volver
+    </button>
+</div>
+
+{% endblock %}

@@ -28,13 +28,18 @@
   </div>
 
   <!-- === Botón de descarga === -->
-  <div style="margin-top:20px;">
-    <h4>📄 Descargar</h4>
-    <button onclick="generarReportePDF()" 
+  <form method="POST" action="{% url 'generar_reporte' %}">
+    {% csrf_token %}
+
+    <input type="hidden" name="periodo" id="inputPeriodo">
+    <input type="hidden" name="tipo" id="inputTipo">
+
+    <button type="submit"
             style="background:#7b0018; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer;">
-      Descargar PDF
+        Descargar PDF
     </button>
-  </div>
+</form>
+
 
   <!-- === Listado de reportes === -->
   <div style="margin-top:20px;">
@@ -123,4 +128,16 @@ function cerrarSesion() {
   alert("Sesión cerrada correctamente.");
   window.location.href = "{% url 'home' %}";
 }
+
+
+
+document.querySelector("form").addEventListener("submit", () => {
+    document.getElementById("inputPeriodo").value =
+        document.getElementById("reporte-periodo").value;
+
+    document.getElementById("inputTipo").value =
+        document.getElementById("reporte-tipo").value;
+});
+
+
 </script>

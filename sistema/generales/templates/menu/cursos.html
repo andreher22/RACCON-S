@@ -1,10 +1,11 @@
 <!-- templates/menu/cursos.html -->
+<!-- templates/menu/cursos.html -->
 <div class="card">
   <h3>Cursos</h3>
 
   {% if rol == 'administrador' %}
     <div style="margin-bottom: 12px;">
-      <button onclick="window.location.href='crear_curso.html'">➕ Crear curso</button>
+       <button onclick="window.location.href='{% url 'crear_curso' %}'">➕ Crear curso</button>
     </div>
   {% endif %}
 
@@ -49,5 +50,3 @@
     window.location.href = "{% url 'home' %}";
   }
 </script>
-
-

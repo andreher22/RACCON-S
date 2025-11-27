@@ -56,9 +56,11 @@
 <div class="card" style="margin-top:16px">
   <h3>Últimas Actividades</h3>
   <ul>
-    <li>Actualización de datos del sistema</li>
-    <li>Revisión de evaluaciones</li>
-    <li>Nuevo usuario registrado</li>
+    {% for a in actividades %}
+      <li>{{ a.descripcion }} — <small>{{ a.fecha|date:"d/m H:i" }}</small></li>
+    {% empty %}
+      <li>No hay actividades registradas.</li>
+    {% endfor %}
   </ul>
 </div>
 {% endif %}

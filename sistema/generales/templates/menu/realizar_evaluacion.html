@@ -1,0 +1,29 @@
+{% comment %} APARTADO PARA QUE ALUMNO RESPONDA {% endcomment %}
+
+{% comment %} NOTA:Por el momento este apartado no es visible en alumnos ya que la evaluacion cerrada
+ no logra ser visualiada en el apartado, lo que hace imposible la interaccion {% endcomment %}
+
+<div class="card">
+  <h3>{{ pendiente.evaluacion.titulo }}</h3>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    {% for p in preguntas %}
+    <div style="margin-bottom:20px;">
+      <strong>{{ p.texto }}</strong><br>
+
+      <select name="preg_{{ p.id }}" required>
+        <option value="">Seleccione</option>
+        <option value="1">1 - Muy Malo</option>
+        <option value="2">2 - Malo</option>
+        <option value="3">3 - Regular</option>
+        <option value="4">4 - Bueno</option>
+        <option value="5">5 - Excelente</option>
+      </select>
+    </div>
+    {% endfor %}
+
+    <button type="submit" style="background:#7b0018; color:white;">Enviar Respuestas</button>
+  </form>
+</div>
